@@ -22,24 +22,24 @@ python io_train_sample.py --mtr_exp_name Exp3 --exp_name Exp3_1454 --proposed_sp
 **train**:  
 python train_predict_gcn.py --mtr_exp_name Exp2 --exp_name Exp2_1949  
 
-**test (50 sample):**
+**test (50 sample):**  
 python test_gcn.py --mtr_exp_name Exp2 --exp_name Exp2_1949 --feat 900 --nsample 50  
 python test_gcn.py --mtr_exp_name Exp3 --exp_name Exp3_1454 --feat 850 --nsample 50 --proposed_split  
-**test (gzsl):**
+**test (gzsl):**  
 python test_gcn.py --mtr_exp_name Exp2 --exp_name Exp2_1949 --feat 900 --nsample 50 --gzsl
 
 #### DGP
-**prepare graph**:
+**prepare graph**:  
 python make_induced_graph.py --mtr_exp_name Exp2 --exp_name Exp2_1949
 
-**train**:
+**train**:  
 python train_predict_gpm.py --mtr_exp_name Exp2 --exp_name Exp2_1949  
 python train_predict_gpm.py --mtr_exp_name Exp3 --exp_name Exp3_1454 --proposed_split
 
-**test**:
+**test**:  
 python test_gpm.py --mtr_exp_name Exp2 --exp_name Exp2_1949 --pred 400 --nsample 50
 
-**test (gzsl)**:
+**test (gzsl)**:  
 python test_gpm.py --mtr_exp_name Exp2 --exp_name Exp2_1949 --pred 400 --nsample 50 --gzsl
 
 
