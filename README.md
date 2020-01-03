@@ -4,7 +4,7 @@
 **Exp1**: original animal classes subset (seen:398, unseen:485)
 
 #### Small Subset
-**Exp2**: standard split (seen:19, unseen:49)
+**Exp2**: standard split (seen:19, unseen:49)  
 **Exp3**: proposed split (seen:14, unseen:54)
 
 
