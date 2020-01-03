@@ -1,6 +1,5 @@
 import torch.nn as nn
 import torch
-import config
 
 def weights_init(m):
     classname = m.__class__.__name__

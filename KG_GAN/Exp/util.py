@@ -5,10 +5,10 @@ import torch
 from sklearn import preprocessing
 import sys
 from sklearn.cluster import KMeans
-import config
 import os
 import time
 import pickle
+
 def GetNowTime():
     return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
 
@@ -57,7 +57,7 @@ class DATA_LOADER(object):
         self.text_dim = self.sem_dim  # 500
         self.train_cls_num = self.seenclasses.shape[0]
         self.test_cls_num = self.unseenclasses.shape[0]
-        self.tr_cls_centroid = np.zeros([self.seenclasses.shape[0], self.feature_dim], np.float32)  # (249, 2048)
+        # self.tr_cls_centroid = np.zeros([self.seenclasses.shape[0], self.feature_dim], np.float32)  # (249, 2048)
         # torch.nonzero: return the index of non-zero value
         # function: average the sample feature of seen classes
         # for i in range(self.seenclasses.shape[0]):

@@ -18,8 +18,8 @@ def loadArgums():
 
     parser.add_argument('--SemEmbed', default='n2v', help='the type of class embedding to input')
     parser.add_argument('--SemFile', default='n2v.mat', help='the file to store class embedding')
-    parser.add_argument('--SemSize', type=int, default=10, help='size of semantic features')
-    parser.add_argument('--NoiseSize', type=int, default=10, help='size of semantic features')
+    parser.add_argument('--SemSize', type=int, default=100, help='size of semantic features')
+    parser.add_argument('--NoiseSize', type=int, default=50, help='size of semantic features')
     parser.add_argument('--FeaSize', default=2048, help='size of visual features')
 
     parser.add_argument('--ExpName', default='Exp2', help='the folder to store class file and class embedding file')
@@ -92,7 +92,7 @@ def loadArgums():
         args.SemFile = 'w2v.mat'
         args.SemSize = 500
         args.NoiseSize = 500
-    if args.SeenEmbed == 'n2v':
+    if args.SemEmbed == 'n2v':
         args.SemFile = os.path.join('KG-GAN', args.ExpName, args.SemFile)
 
     return args

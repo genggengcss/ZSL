@@ -9,10 +9,11 @@ import scipy.sparse as sp
 import torch
 from torch import optim
 import os
-import json
-from N2v_GAE.model import GCNModelVAE
-from N2v_GAE.optimizer import loss_function
-from N2v_GAE.utils import load_data_att, mask_test_edges, preprocess_graph, get_roc_score
+import sys
+sys.path.append('../../')
+from KG_GAN.N2v_GAE_TwoView.model import GCNModelVAE
+from KG_GAN.N2v_GAE_TwoView.optimizer import loss_function
+from KG_GAN.N2v_GAE_TwoView.utils import load_data_att, mask_test_edges, preprocess_graph, ensure_path
 import os.path as osp
 import shutil
 
@@ -22,11 +23,17 @@ import shutil
 using the graph and corresponding w2v to train GAE, get node embedding (n2v)
 '''
 DATA_DIR = '/Users/geng/Desktop/ZSL_DATA/ImageNet/KG-GAN'
-Exp_NAME = 'Exp15'
-graphf = 'att/graph.pkl'
-# input_embed = 'g_embed.mat'
-input_embed = 'att/g_embed.pkl'
-save_path = os.path.join(DATA_DIR, Exp_NAME, 'att/embed')
+
+Exp_NAME = 'Exp2'
+type_name = 'att'
+
+graph_file = os.path.join(DATA_DIR, Exp_NAME, type_name, 'graph.pkl')
+input_fea_file = os.path.join(DATA_DIR, Exp_NAME, type_name, 'g_embed.pkl')
+
+save_path = os.path.join(DATA_DIR, Exp_NAME, type_name, 'embed')
+ensure_path(save_path)
+
+
 parser = argparse.ArgumentParser()
 # parser.add_argument('--seed', type=int, default=8220, help='Random seed.')
 parser.add_argument('--epochs', type=int, default=2000, help='Number of epochs to train.')
@@ -45,25 +52,17 @@ else:
     ManualSeed = args.manual_seed
 print("Random Seed: ", ManualSeed)
 
+
 # set random seed
 random.seed(ManualSeed)
+np.random.seed(ManualSeed)
 torch.manual_seed(ManualSeed)
 
 
-def ensure_path(path):
-    if osp.exists(path):
-        if input('{} exists, remove? ([y]/n)'.format(path)) != 'n':
-            shutil.rmtree(path)
-            os.mkdir(path)
-    else:
-        os.mkdir(path)
-
-ensure_path(save_path)
 
 
 def gae_for(args):
-    graph_file = os.path.join(DATA_DIR, Exp_NAME, graphf)
-    input_fea_file = os.path.join(DATA_DIR, Exp_NAME, input_embed)
+
     adj, features = load_data_att(graph_file, input_fea_file)
     n_nodes, feat_dim = features.shape
     print("nodes, fea dim:", n_nodes, feat_dim)
@@ -114,7 +113,7 @@ def gae_for(args):
               "time=", "{:.5f}".format(time.time() - t)
               )
     #
-        if (epoch+1) >= 500 and (epoch+1) % 50 == 0:
+        if (epoch+1) >= 800 and (epoch+1) % 50 == 0:
             # roc_score, ap_score = get_roc_score(hidden_emb, adj_orig, test_edges, test_edges_false)
             # print('Test ROC score: ' + str(roc_score))
             # print('Test AP score: ' + str(ap_score))

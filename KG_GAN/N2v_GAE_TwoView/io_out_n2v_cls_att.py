@@ -124,12 +124,12 @@ def prepare_n2v():
 if __name__ == '__main__':
     seen, unseen = load_class()
 
-    cls_seen_embed, cls_unseen_embed, cls_seen_corresp, cls_unseen_corresp = extract_embed('cls', '400.pkl')
-    # att_seen_embed, att_unseen_embed, att_seen_corresp, att_unseen_corresp= extract_embed('att', '1850.pkl')
+    cls_seen_embed, cls_unseen_embed, cls_seen_corresp, cls_unseen_corresp = extract_embed('cls', '500.pkl')
+    att_seen_embed, att_unseen_embed, att_seen_corresp, att_unseen_corresp= extract_embed('att', '1850.pkl')
 
     save_file = 'n2v.mat'
     # process the format for inputting GAN
-    # prepare_n2v()
+    prepare_n2v()
 
 
 

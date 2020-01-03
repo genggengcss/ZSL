@@ -3,21 +3,20 @@ import torch.nn as nn
 from torch.autograd import Variable
 import torch.optim as optim
 import numpy as np
-import util
+import sys
+
 from termcolor import cprint
 
 import itertools
 import os
-import sys
+
 
 import matplotlib.pyplot as plt
 import numpy as np
-import torch.nn.functional as F
-from scipy.stats import entropy
-from sklearn.metrics import confusion_matrix
-import config
-import time
-import collections
+
+
+sys.path.append('../../')
+from KG_GAN.Exp import util
 
 
 # classifier in testing stage, is trained with generated unseen features
@@ -132,6 +131,7 @@ class CLASSIFIER:
             #                                                      self.unseenclasses)
             overall_acc, acc_of_all = self.val_zsl(self.test_unseen_feature, self.test_unseen_label,
                                                                  self.unseenclasses)
+            # testing the hit@1,2,5,..
             # overall_acc, overall_acc_Hit = self.val_zsl_Hit(self.test_unseen_feature, self.test_unseen_label,
             #                                        self.unseenclasses)
 

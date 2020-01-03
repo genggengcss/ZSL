@@ -9,13 +9,18 @@ import torch.optim as optim
 import torch.backends.cudnn as cudnn
 from torch.autograd import Variable
 import util
-import classifier_pretrain
-import classifier_cls
-import sys
-import model
+
 import numpy as np
 import time
-import config_args
+
+
+
+import sys
+sys.path.append('../../')
+from KG_GAN.Exp import config_args
+from KG_GAN.Exp import model
+from KG_GAN.Exp import classifier_cls
+from KG_GAN.Exp import classifier_pretrain
 
 
 

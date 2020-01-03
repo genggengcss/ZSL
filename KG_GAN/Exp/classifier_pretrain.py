@@ -3,7 +3,10 @@ import torch.nn as nn
 from torch.autograd import Variable
 import torch.optim as optim
 import numpy as np
-import util
+import sys
+sys.path.append('../../')
+from KG_GAN.Exp import util
+
 from sklearn.preprocessing import MinMaxScaler
 import sys
 

@@ -23,8 +23,10 @@ WORD_VEC_LEN = 300
 
 animal_wnid = 'n00015388'  # for extracting animal subset
 DATA_DIR = '/Users/geng/Desktop/ZSL_DATA/ImageNet/KG-GAN'
-Exp_NAME = 'Exp15'
 Material_DATA_DIR = '/Users/geng/Desktop/ZSL_DATA/ImageNet'
+
+Exp_NAME = 'Exp2'
+type_name = 'att'
 
 def readTxt(file_name):
     id_text = dict()
@@ -38,7 +40,7 @@ def readTxt(file_name):
         texts.close()
     return id_text
 
-def embed_text_file(vertices_f, word_vectors, get_vector, save_file, class_list):
+def embed_text_file(vertices_f, word_vectors, get_vector, save_file):
     with open(vertices_f) as fp:
         vertices_list = json.load(fp)
 
@@ -79,8 +81,7 @@ def embed_text_file(vertices_f, word_vectors, get_vector, save_file, class_list)
 
     for each in missed_list:
         print(each)
-        # if each in class_list:
-        #     print(each)
+
     print('does not have semantic embedding: ', cnt_missed, 'has: ', has)
 
     if not os.path.exists(os.path.dirname(save_file)):
@@ -145,7 +146,7 @@ def fasttext(word_vectors, word):
 # the order of the vectors are consistent with the wordntext
 if __name__ == '__main__':
 
-    vertices_file = os.path.join(DATA_DIR, Exp_NAME, 'att/g_nodes.json')
+    vertices_file = os.path.join(DATA_DIR, Exp_NAME, type_name, 'g_nodes.json')
 
     # load text
     # wnid_word = dict()
@@ -154,20 +155,12 @@ if __name__ == '__main__':
 
     wnid_word.update(att_word)
 
-    # load class
-    class_list = list()
-    with open(os.path.join(DATA_DIR, Exp_NAME, 'seen.txt')) as fp:
-        for line in fp.readlines():
-            class_list.append(line.strip())
-    with open(os.path.join(DATA_DIR, Exp_NAME, 'unseen.txt')) as fp:
-        for line in fp.readlines():
-            class_list.append(line.strip())
-    print("class num:", len(class_list))
 
-    save_file = os.path.join(DATA_DIR, Exp_NAME, 'att/g_embed.pkl')
+
+    save_file = os.path.join(DATA_DIR, Exp_NAME, type_name, 'g_embed.pkl')
 
     word_vectors = get_glove_dict('/Users/geng/Desktop/ZSL_DATA/ImageNet/Baseline/GCNZ/materials')
     get_vector = glove_google
 
     print('obtain semantic word embedding', save_file)
-    embed_text_file(vertices_file, word_vectors, get_vector, save_file, class_list)
+    embed_text_file(vertices_file, word_vectors, get_vector, save_file)

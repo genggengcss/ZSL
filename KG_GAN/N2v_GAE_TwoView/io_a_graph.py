@@ -7,15 +7,20 @@ from nltk.corpus import wordnet as wn
 import xml.etree.ElementTree as ET
 
 import scipy.io as scio
+import sys
+sys.path.append('../../')
+from KG_GAN.N2v_GAE_TwoView.utils import ensure_path
 
 '''
 Prepare the graph inputting for GAE
 '''
 animal_wnid = 'n00015388'  # for extracting animal subset
 DATA_DIR = '/Users/geng/Desktop/ZSL_DATA/ImageNet/KG-GAN'
-Exp_NAME = 'Exp15'
 Material_DATA_DIR = '/Users/geng/Desktop/ZSL_DATA/ImageNet'
 
+Exp_NAME = 'Exp2'
+type_name = 'att'
+ensure_path(os.path.join(DATA_DIR, Exp_NAME, type_name))
 # wnid files
 seen_file = os.path.join(DATA_DIR, Exp_NAME, 'seen.txt')
 unseen_file = os.path.join(DATA_DIR, Exp_NAME, 'unseen.txt')
@@ -112,12 +117,10 @@ def ID2Index(wnids, node_wnids):
 
 def convert_graph(vertices, edges):
     # save graph nodes/wnids/classes
-    graph_nodes_file = os.path.join(DATA_DIR, Exp_NAME, 'att/g_nodes.json')
+    graph_nodes_file = os.path.join(DATA_DIR, Exp_NAME, type_name, 'g_nodes.json')
     with open(graph_nodes_file, 'w') as fp:
         json.dump(vertices, fp)
     print('Save graph node in wnid to %s' % graph_nodes_file)
-
-
 
     # save graph
     ver_dict = {}
@@ -130,7 +133,7 @@ def convert_graph(vertices, edges):
         id2 = ver_dict[edge[1]]
         graph[id1].append(id2)
         graph[id2].append(id1)
-    graph_file = os.path.join(DATA_DIR, Exp_NAME, 'att/graph.pkl')
+    graph_file = os.path.join(DATA_DIR, Exp_NAME, type_name, 'graph.pkl')
     with open(graph_file, 'wb') as fp:
         pkl.dump(graph, fp)
     print('Save Graph structure to: ', graph_file)
@@ -150,12 +153,12 @@ def save_corresp(vertices, seen, unseen):
             unseen_idx_in_graph.append(i)
         else:
             continue
-    seen_corresp_file = os.path.join(DATA_DIR, Exp_NAME, 'att/g_seen_corresp.json')
+    seen_corresp_file = os.path.join(DATA_DIR, Exp_NAME, type_name, 'g_seen_corresp.json')
     with open(seen_corresp_file, 'w') as fp:
         json.dump(seen_idx_in_graph, fp)
     print('Save seen index in graph to %s' % seen_corresp_file)
 
-    unseen_corresp_file = os.path.join(DATA_DIR, Exp_NAME, 'att/g_unseen_corresp.json')
+    unseen_corresp_file = os.path.join(DATA_DIR, Exp_NAME, type_name, 'g_unseen_corresp.json')
     with open(unseen_corresp_file, 'w') as fp:
         json.dump(unseen_idx_in_graph, fp)
     print('Save unseen index in graph to %s' % unseen_corresp_file)

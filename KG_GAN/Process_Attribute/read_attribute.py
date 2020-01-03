@@ -16,7 +16,7 @@ def getwnid(u):
 class_attribute_csv = "/Users/geng/Desktop/class-attribute1229-2.csv"
 
 DATA_DIR = '/Users/geng/Desktop/ZSL_DATA/ImageNet/KG-GAN'
-EXP_NAME = 'Exp15'
+EXP_NAME = 'Exp2'
 
 cls_att_csv = open(class_attribute_csv, "r")
 reader = csv.reader(cls_att_csv)
