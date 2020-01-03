@@ -7,8 +7,8 @@ import torch
 from nltk.corpus import wordnet as wn
 import scipy.io as scio
 import numpy as np
-sys.path.append('../')
-from gpm import utils
+sys.path.append('../../')
+from DGP.gpm import utils
 '''
 input: seen.txt, unseen.txt, imagenet-xml-wnids.json, w2v.mat
 get:  'induced-graph.json'

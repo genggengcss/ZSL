@@ -8,9 +8,9 @@ import torch
 import torch.nn.functional as F
 import scipy.io as scio
 import numpy as np
-sys.path.append('../')
-from gpm import gcn
-from gpm import utils
+sys.path.append('../../')
+from DGP.gpm import gcn
+from DGP.gpm import utils
 # from IMAGENET_Animal.ZSL_Model.Exp1_GPM import test_in_train
 '''
 input: imagenet-induced-animal-graph.json, fc-weights.json

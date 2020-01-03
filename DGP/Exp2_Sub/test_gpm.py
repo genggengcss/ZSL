@@ -5,8 +5,8 @@ import os.path as osp
 import sys
 import time
 import torch
-sys.path.append('../')
-from gpm import utils
+sys.path.append('../../')
+from DGP.gpm import utils
 import scipy.io as scio
 import os
 import numpy as np
@@ -36,7 +36,7 @@ if __name__ == '__main__':
     parser.add_argument('--output', default=None)
     args = parser.parse_args()
     print('Exp_Name: {:s}, Class Ref: {:s}, Dataset Split: {:s}, GZSL:{:s}'.format(
-        args.exp_name, args.mtr_exp_name, args.proposed_split, str(args.gzsl)))
+        args.exp_name, args.mtr_exp_name, str(args.proposed_split), str(args.gzsl)))
 
     if args.proposed_split:
         args.seen_feat = os.path.join(Material_DATA_DIR, 'Res101_Features', 'ProposedSplit/Seen_val')
