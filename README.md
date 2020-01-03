@@ -23,10 +23,10 @@ python io_train_sample.py --mtr_exp_name Exp3 --exp_name Exp3_1454 --proposed_sp
 **train**:  
 python train_predict_gcn.py --mtr_exp_name Exp2 --exp_name Exp2_1949
 
-**test: (50 sample)**
+**test (50 sample):**
 python test_gcn.py --mtr_exp_name Exp2 --exp_name Exp2_1949 --feat 900 --nsample 50 
 
-**test: (gzsl)**
+**test (gzsl):**
 python test_gcn.py --mtr_exp_name Exp2 --exp_name Exp2_1949 --feat 900 --nsample 50 --gzsl
 
 #### DGP
@@ -38,6 +38,9 @@ python train_predict_gpm.py --mtr_exp_name Exp2 --exp_name Exp2_1949
 
 **test**:
 python test_gpm.py --mtr_exp_name Exp2 --exp_name Exp2_1949 --pred 400 --nsample 50
+
+**test (gzsl)**:
+python test_gpm.py --mtr_exp_name Exp2 --exp_name Exp2_1949 --pred 400 --nsample 50 --gzsl
 
 
 #### KG_GAN  
