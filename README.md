@@ -37,7 +37,8 @@ python train_predict_gpm.py --mtr_exp_name Exp2 --exp_name Exp2_1949
 python train_predict_gpm.py --mtr_exp_name Exp3 --exp_name Exp3_1454 --proposed_split
 
 **test**:  
-python test_gpm.py --mtr_exp_name Exp2 --exp_name Exp2_1949 --pred 400 --nsample 50
+python test_gpm.py --mtr_exp_name Exp2 --exp_name Exp2_1949 --pred 400 --nsample 50  
+python test_gpm.py --mtr_exp_name Exp3 --exp_name Exp3_1454 --pred 300 --nsample 50 --proposed_split
 
 **test (gzsl)**:  
 python test_gpm.py --mtr_exp_name Exp2 --exp_name Exp2_1949 --pred 400 --nsample 50 --gzsl
@@ -45,6 +46,7 @@ python test_gpm.py --mtr_exp_name Exp2 --exp_name Exp2_1949 --pred 400 --nsample
 
 #### KG_GAN  
 **w2v**: python lisgan.py --ExpName Exp2 --SemEmbed w2v  
+**w2v**: python lisgan.py --ExpName Exp3 --SemEmbed w2v --ProposedSplit  
 **n2v**: python lisgan.py --ExpName Exp2 --SemFile n2v.mat --SemSize 100 --NoiseSize 50  
 
 **gzsl**: python lisgan.py --ExpName Exp2 --SemFile n2v.mat --SemSize 100 --NoiseSize 50 --GZSL
