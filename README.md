@@ -24,7 +24,10 @@ python io_train_sample.py --mtr_exp_name Exp3 --exp_name Exp3_1454 --proposed_sp
 python train_predict_gcn.py --mtr_exp_name Exp2 --exp_name Exp2_1949
 
 **test: (50 sample)**
-python test_gcn.py --mtr_exp_name Exp2 --exp_name Exp2_1949 --feat 900 --nsample 50
+python test_gcn.py --mtr_exp_name Exp2 --exp_name Exp2_1949 --feat 900 --nsample 50 
+
+**test: (gzsl)**
+python test_gcn.py --mtr_exp_name Exp2 --exp_name Exp2_1949 --feat 900 --nsample 50 --gzsl
 
 #### DGP
 **prepare graph**:
@@ -35,3 +38,10 @@ python train_predict_gpm.py --mtr_exp_name Exp2 --exp_name Exp2_1949
 
 **test**:
 python test_gpm.py --mtr_exp_name Exp2 --exp_name Exp2_1949 --pred 400 --nsample 50
+
+
+#### KG_GAN  
+**w2v**: python lisgan.py --ExpName Exp2 --SemEmbed w2v  
+**n2v**: python lisgan.py --ExpName Exp2 --SemFile n2v.mat --SemSize 100 --NoiseSize 50  
+
+**gzsl**: 
