@@ -47,4 +47,4 @@ python test_gpm.py --mtr_exp_name Exp2 --exp_name Exp2_1949 --pred 400 --nsample
 **w2v**: python lisgan.py --ExpName Exp2 --SemEmbed w2v  
 **n2v**: python lisgan.py --ExpName Exp2 --SemFile n2v.mat --SemSize 100 --NoiseSize 50  
 
-**gzsl**: 
+**gzsl**: python lisgan.py --ExpName Exp2 --SemFile n2v.mat --SemSize 100 --NoiseSize 50 --GZSL
