@@ -14,8 +14,7 @@ sys.path.append('../../')
 from KG_GAN.N2v_GAE_TwoView.model import GCNModelVAE
 from KG_GAN.N2v_GAE_TwoView.optimizer import loss_function
 from KG_GAN.N2v_GAE_TwoView.utils import load_data_att, mask_test_edges, preprocess_graph, ensure_path
-import os.path as osp
-import shutil
+
 
 
 
@@ -24,7 +23,7 @@ using the graph and corresponding w2v to train GAE, get node embedding (n2v)
 '''
 DATA_DIR = '/Users/geng/Desktop/ZSL_DATA/ImageNet/KG-GAN'
 
-Exp_NAME = 'Exp2'
+Exp_NAME = 'Exp3'
 type_name = 'att'
 
 graph_file = os.path.join(DATA_DIR, Exp_NAME, type_name, 'graph.pkl')

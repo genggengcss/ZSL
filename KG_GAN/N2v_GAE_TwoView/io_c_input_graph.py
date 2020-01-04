@@ -16,7 +16,7 @@ Prepare the graph inputting for GAE
 '''
 animal_wnid = 'n00015388'  # for extracting animal subset
 DATA_DIR = '/Users/geng/Desktop/ZSL_DATA/ImageNet/KG-GAN'
-Exp_NAME = 'Exp2'
+Exp_NAME = 'Exp3'
 type_name = 'cls'
 Material_DATA_DIR = '/Users/geng/Desktop/ZSL_DATA/ImageNet'
 

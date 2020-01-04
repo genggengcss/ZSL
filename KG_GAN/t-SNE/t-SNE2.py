@@ -25,7 +25,7 @@ Exp: 550.pkl
 '''
 DATA_DIR = '/Users/geng/Desktop/ZSL_DATA/ImageNet/KG-GAN'
 ImageNet_DIR = '/Users/geng/Desktop/ZSL_DATA/ImageNet'
-EXP_NAME = 'Exp2'
+
 
 
 
@@ -146,7 +146,7 @@ def showWithName(data, label, name, filename):
     plt.yticks([])
     plt.title('t-SNE embedding of the digits (time %.2fs), %s' % ((time() - t0), filename))
     out_name = filename.split('/')[-1]+'.pdf'
-    plt.savefig(out_name, dpi=1500, bbox_inches='tight')
+    # plt.savefig(out_name, dpi=1500, bbox_inches='tight')
     plt.show()
 
 
@@ -171,14 +171,15 @@ if __name__ == '__main__':
     # embed, label = readDataW()
     # showNonName(embed, label, '')
 
-    type_name = 'att'
+    EXP_NAME = 'Exp3'
+    type_name = 'cls'
     seen_corresp, seen_length, unseen_corresp, graph_nodes = load_data()
 
 
 
 
     # graph embedding
-    filename = os.path.join(type_name, 'embed/1850.pkl_su.pkl')
+    filename = os.path.join(type_name, 'embed/400.pkl_su.pkl')
     # embed, label = readDataNonName(filename)
     # showNonName(embed, label, filename)
     embed, label, name = readDataWithName(filename)

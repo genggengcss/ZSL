@@ -23,7 +23,7 @@ import shutil
 using the graph and corresponding w2v to train GAE, get node embedding (n2v)
 '''
 DATA_DIR = '/Users/geng/Desktop/ZSL_DATA/ImageNet/KG-GAN'
-Exp_NAME = 'Exp2'
+Exp_NAME = 'Exp3'
 type_name = 'cls'
 
 graph_file = os.path.join(DATA_DIR, Exp_NAME, type_name, 'graph.pkl')
@@ -33,12 +33,12 @@ save_path = os.path.join(DATA_DIR, Exp_NAME, type_name, 'embed')
 ensure_path(save_path)
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--epochs', type=int, default=600, help='Number of epochs to train.')
+parser.add_argument('--epochs', type=int, default=800, help='Number of epochs to train.')
 parser.add_argument('--hidden1', type=int, default=150, help='Number of units in hidden layer 1.')
 parser.add_argument('--hidden2', type=int, default=50, help='Number of units in hidden layer 2.')
-parser.add_argument('--lr', type=float, default=0.001, help='Initial learning rate.')
+parser.add_argument('--lr', type=float, default=0.002, help='Initial learning rate.')
 parser.add_argument('--dropout', type=float, default=0., help='Dropout rate (1 - keep probability).')
-parser.add_argument('--manual_seed', type=int, default=9728, help='set the random seed')
+parser.add_argument('--manual_seed', type=int, help='set the random seed')
 
 args = parser.parse_args()
 

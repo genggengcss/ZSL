@@ -11,10 +11,10 @@ original graph file: wordnet_tree_structure.xml
 '''
 
 
-DATA_DIR = '/home/gyx/ZSL/data/ImageNet/Baseline/GCNZ'
-# DATA_DIR = '/Users/geng/Desktop/ZSL_DATA/ImageNet/Baseline/GCNZ'
-# Material_DATA_DIR = '/Users/geng/Desktop/ZSL_DATA/ImageNet'
-Material_DATA_DIR = '/home/gyx/ZSL/data/ImageNet'
+# DATA_DIR = '/home/gyx/ZSL/data/ImageNet/Baseline/GCNZ'
+DATA_DIR = '/Users/geng/Desktop/ZSL_DATA/ImageNet/Baseline/GCNZ'
+Material_DATA_DIR = '/Users/geng/Desktop/ZSL_DATA/ImageNet'
+# Material_DATA_DIR = '/home/gyx/ZSL/data/ImageNet'
 
 animal_wnid = 'n00015388'  # extract animal subset
 
@@ -109,19 +109,20 @@ def prepare_graph():
     # move to the animal nodes start
     for sy in root.findall('synset'):  # find synset tag
         for ssy in sy.findall('synset'):  # deeper layer
-            # print("wnid:", ssy.get('wnid'))
-            if ssy.get('wnid') == animal_wnid:  # get tag's attribute value(wnid), 'n00015388' represents 'animal'
+            print("wnid:", ssy.get('wnid'))
+            if ssy.get('wnid') == 'n00523513':  # get tag's attribute value(wnid), 'n00015388' represents 'animal'
                 vertex_list, edge_list = add_edge_dfs(ssy)  # animal node -> the root node
             else:
                 continue
+    print(vertex_list[150])
     # move to the animal nodes end
 
-    vertex_list = list(set(vertex_list))  # remove the repeat node
-    print('Unique Vertex #: %d, Edge #: %d', (len(vertex_list), len(edge_list)))
-    f_vertices, f_edges = filter_graph(vertex_list, edge_list)
-    print('Filtered Vertex #: %d, Edge #: %d', (len(f_vertices), len(f_edges)))
-
-    convert_to_graph(f_vertices, f_edges)
+    # vertex_list = list(set(vertex_list))  # remove the repeat node
+    # print('Unique Vertex #: %d, Edge #: %d', (len(vertex_list), len(edge_list)))
+    # f_vertices, f_edges = filter_graph(vertex_list, edge_list)
+    # print('Filtered Vertex #: %d, Edge #: %d', (len(f_vertices), len(f_edges)))
+    #
+    # convert_to_graph(f_vertices, f_edges)
 
 
 # Label each seen and unseen class with an order number e.g., 0-397, 398-407
@@ -188,5 +189,5 @@ if __name__ == '__main__':
         os.makedirs(save_dir)
 
     prepare_graph()
-    make_corresp()
+    # make_corresp()
 

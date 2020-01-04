@@ -18,7 +18,7 @@ animal_wnid = 'n00015388'  # for extracting animal subset
 DATA_DIR = '/Users/geng/Desktop/ZSL_DATA/ImageNet/KG-GAN'
 Material_DATA_DIR = '/Users/geng/Desktop/ZSL_DATA/ImageNet'
 
-Exp_NAME = 'Exp2'
+Exp_NAME = 'Exp3'
 type_name = 'att'
 ensure_path(os.path.join(DATA_DIR, Exp_NAME, type_name))
 # wnid files
