@@ -41,13 +41,6 @@ def loadArgums():
     parser.add_argument('--Critic_Iter', default=5, help='critic iteration of discriminator, default=5, following WGAN-GP setting')
     parser.add_argument('--GP_Weight', type=float, default=10, help='gradient penalty regularizer, default=10, the completion of Lipschitz Constraint in WGAN-GP')
     parser.add_argument('--Cls_Weight', default=0.01, help='loss weight for the supervised classification loss')
-    # parser.add_argument('--Proto_Weight1', default=0.01, help='# para for soul samples\'s regularization1')
-    # parser.add_argument('--Proto_Weight2', default=0.01, help='para for soul samples\'s regularization2')
-    parser.add_argument('--Proto_Weight1', default=0, help='# para for soul samples\'s regularization1')
-    parser.add_argument('--Proto_Weight2', default=0, help='para for soul samples\'s regularization2')
-    parser.add_argument('--NClusters', default=3, help='number of real sample clusters')
-    parser.add_argument('--Cluster_Save_Dir', default='save_cluster_3', help='')
-    parser.add_argument('--NSynClusters', default=20, help='number of fake clusters?')
     parser.add_argument('--SynNum', default=300, help='number of features generating for each unseen class; awa_default = 300')
     parser.add_argument('--SeenSynNum', default=300, help='number of features for training seen classifier when testing')
 

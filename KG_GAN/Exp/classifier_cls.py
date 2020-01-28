@@ -147,16 +147,11 @@ class CLASSIFIER:
         print('First Acc: {:.2f}%'.format(first_acc * 100))
         # print('First Acc: ', ['{:.2f}'.format(i * 100) for i in first_accs])
         if self.args.PerClassAcc:
-            # acc_per = ['{:.2f}'.format(x * 100) for x in list(first_acc_of_all)]
-            # print(acc_per)
-            # acc_per = collections.OrderedDict()  # output is ordered by input
             first_acc_of_all = first_acc_of_all.numpy()
             for i in range(len(first_acc_of_all)):
                 x = first_acc_of_all[i]
                 class_name = self.unseennames[i]
-                # acc_per[class_name] = np.round(x * 100, 2)
                 print('{}/{}, {}, acc: {:.2f} : '.format(i+1, len(first_acc_of_all), class_name, np.round(x * 100, 2)))
-            # print(acc_per)
         sys.stdout.flush()
         return first_acc
 

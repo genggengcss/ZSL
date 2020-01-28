@@ -67,12 +67,10 @@ print("Training samples: ", data.ntrain)  # number of training samples
 netG = model.MLP_G(args)
 if args.NetG_Path != '':
     netG.load_state_dict(torch.load(args.NetG_Path))  # load the trained model: model.load_state_dict(torch.load(PATH))
-# print(netG)
 
 netD = model.MLP_CRITIC(args)
 if args.NetD_Path != '':
     netD.load_state_dict(torch.load(args.NetD_Path))
-# print(netD)
 
 # classification loss, Equation (4) of the paper
 cls_criterion = nn.NLLLoss()  # cross entropy loss
