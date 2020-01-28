@@ -1,5 +1,11 @@
 # ZSL
 
+### Baseline
+GCNZ: "Zero-shot recognition via semantic embeddings and knowledge graphs"
+DGP: "Rethinking knowledge graph propagation for zero-shot learning"
+GAZSL: "A generative adversarial approach for zero-shot learning from noisy texts"
+LisGAN: "Leveraging the invariant side of generative zero-shot learning"
+
 ### Experiment Class Split 
 **Exp1**: original animal classes subset (seen:398, unseen:485)
 
