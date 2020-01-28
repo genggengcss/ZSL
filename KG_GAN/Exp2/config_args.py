@@ -1,7 +1,19 @@
 import argparse
+import json
+import pickle as pkl
+
+import networkx as nx
+import numpy as np
+
+
+import scipy.sparse as sp
+import torch
+import sys
 import os
 
-import random
+
+
+
 def loadArgums():
     parser = argparse.ArgumentParser()
     '''
@@ -17,15 +29,15 @@ def loadArgums():
     parser.add_argument('--UnseenFeaFile', default='Res101_Features/StandardSplit/ILSVRC2011', help='')
     parser.add_argument('--SplitFile', default='split.mat', help='')
 
-    parser.add_argument('--SemEmbed', default='g2v', help='the type of class embedding to input')
-    parser.add_argument('--SemFile', default='g2v.mat', help='the file to store class embedding')
-    parser.add_argument('--SemSize', type=int, default=100, help='size of semantic features')
-    parser.add_argument('--NoiseSize', type=int, default=100, help='size of semantic features')
+    parser.add_argument('--SemEmbed', default='n2v', help='the type of class embedding to input')
+    parser.add_argument('--SemFile', default='n2v.mat', help='the file to store class embedding')
+    parser.add_argument('--SemSize', type=int, default=50, help='size of semantic features')
+    parser.add_argument('--NoiseSize', type=int, default=50, help='size of semantic features')
     parser.add_argument('--FeaSize', default=2048, help='size of visual features')
 
-    parser.add_argument('--ExpName', default='Exp8', help='the folder to store class file and class embedding file')
+    parser.add_argument('--ExpName', default='Exp6', help='the folder to store class file and class embedding file')
 
-    parser.add_argument('--Unseen_NSample', type=int, help='extract the subset of unseen samples, for testing model')
+    parser.add_argument('--Unseen_NSample', default=50, help='extract the subset of unseen samples, for testing model')
     parser.add_argument('--PerClassAcc', action='store_true', default=False, help='testing the accuracy of each class')
 
     '''
@@ -49,7 +61,7 @@ def loadArgums():
     parser.add_argument('--Cluster_Save_Dir', default='save_cluster_3', help='')
     parser.add_argument('--NSynClusters', default=20, help='number of fake clusters?')
     parser.add_argument('--SynNum', default=300, help='number of features generating for each unseen class; awa_default = 300')
-    parser.add_argument('--SeenSynNum', default=300, help='number of features for training seen classifier when testing')
+    parser.add_argument('--SeenSynNum', default=500, help='number of features for training seen classifier when testing')
 
     '''
     Training Parameter
@@ -60,10 +72,10 @@ def loadArgums():
     parser.add_argument('--Cross_Validation', default=False, help='enable cross validation mode')
     parser.add_argument('--Cuda', default=True, help='')
     parser.add_argument('--NGPU', default=1, help='number of GPUs to use')
-    parser.add_argument('--CUDA_DEVISE', default='3', help='')
-    parser.add_argument('--ManualSeed', default=9416, type=int, help='')  #
+    parser.add_argument('--CUDA_DEVISE', default='2', help='')
+    parser.add_argument('--ManualSeed', type=int, default=9416, help='')
     parser.add_argument('--BatchSize', default=4096, help='')
-    parser.add_argument('--Epoch', default=50, help='')
+    parser.add_argument('--Epoch', default=100, help='')
     parser.add_argument('--LR', default=0.0001, help='learning rate to train GAN')
     parser.add_argument('--Cls_LR', default=0.001, help='after generating unseen features, the learning rate for training softmax classifier')
     parser.add_argument('--Ratio', default=0.1, help='ratio of easy samples')
@@ -75,6 +87,19 @@ def loadArgums():
     parser.add_argument('--PrintEvery', default=1, help='')
     parser.add_argument('--ValEvery', default=1, help='')
     parser.add_argument('--StartEvery', default=0, help='')
+
+    parser.add_argument('--cls_graph', default='', help='')
+    parser.add_argument('--cls_feat', default='', help='')
+    parser.add_argument('--att_graph', default='', help='')
+    parser.add_argument('--att_feat', default='', help='')
+    parser.add_argument('--cls_seen_corresp', default='', help='')
+    parser.add_argument('--cls_unseen_corresp', default='', help='')
+    parser.add_argument('--att_seen_corresp', default='', help='')
+    parser.add_argument('--att_unseen_corresp', default='', help='')
+    parser.add_argument('--cls_nodes', default='', help='')
+    parser.add_argument('--att_nodes', default='', help='')
+
+
 
     args = parser.parse_args()
 
@@ -93,12 +118,31 @@ def loadArgums():
         args.SemFile = 'w2v.mat'
         args.SemSize = 500
         args.NoiseSize = 500
-    if args.SemEmbed == 'g2v':
+    if args.SemEmbed == 'n2v':
         args.SemFile = os.path.join('KG-GAN', args.ExpName, args.SemFile)
 
-    if args.ManualSeed is None:
-        args.ManualSeed = random.randint(1, 10000)
+    # DATA_DIR = '/Users/geng/Desktop/ZSL_DATA/ImageNet/KG-GAN'
+    DATA_DIR = '/home/gyx/ZSL/data/ImageNet/KG-GAN'
 
-    print("Random Seed: ", args.ManualSeed)
+    args.cls_graph = os.path.join(DATA_DIR, args.ExpName, 'graph', 'graph_cls.pkl')
+    args.att_graph = os.path.join(DATA_DIR, args.ExpName, 'graph', 'graph_att.pkl')
+
+    args.cls_feat = os.path.join(DATA_DIR, args.ExpName, 'graph', 'embed_cls.pkl')
+    args.att_feat = os.path.join(DATA_DIR, args.ExpName, 'graph', 'embed_att.pkl')
+
+    args.cls_seen_corresp = os.path.join(DATA_DIR, args.ExpName, 'graph', 'seen_corresp_cls.json')
+    args.cls_unseen_corresp = os.path.join(DATA_DIR, args.ExpName, 'graph', 'unseen_corresp_cls.json')
+
+    args.att_seen_corresp = os.path.join(DATA_DIR, args.ExpName, 'graph', 'seen_corresp_att.json')
+    args.att_unseen_corresp = os.path.join(DATA_DIR, args.ExpName, 'graph', 'unseen_corresp_att.json')
+
+    args.cls_nodes = os.path.join(DATA_DIR, args.ExpName, 'graph', 'nodes_cls.json')
+    args.att_nodes = os.path.join(DATA_DIR, args.ExpName, 'graph', 'nodes_att.json')
+
+
+
+
+
+
 
     return args

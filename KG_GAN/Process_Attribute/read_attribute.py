@@ -13,10 +13,10 @@ def getwnid(u):
     s = str(u.offset())
     return 'n' + (8 - len(s)) * '0' + s
 
-class_attribute_csv = "/Users/geng/Desktop/class-attribute1229-2.csv"
+class_attribute_csv = "/Users/geng/Desktop/IJCAI/attribute-annotation/class-attribute-0120.csv"
 
 DATA_DIR = '/Users/geng/Desktop/ZSL_DATA/ImageNet/KG-GAN'
-EXP_NAME = 'Exp2'
+EXP_NAME = 'Exp10'
 
 cls_att_csv = open(class_attribute_csv, "r")
 reader = csv.reader(cls_att_csv)
@@ -43,6 +43,7 @@ for item in islice(reader, 1, None):
     if unseen_class_id != '':
         unseen_classes.append(unseen_class_id)
         name = getnode(unseen_class_id).lemma_names()[0]
+
         if name == item[4]:
             unseen_cls_att[unseen_class_id] = item[5]
         else:
@@ -50,11 +51,10 @@ for item in islice(reader, 1, None):
 
 
 cls_att_csv.close()
+
+
 print("seen classes:", len(seen_classes))
-# print(len(seen_cls_att))
-print(seen_cls_att)
 print("unseen classes:", len(unseen_classes))
-# print(len(seen_classes))
 
 
 # extract attribute
@@ -105,9 +105,10 @@ def saveAttr(att_list, filename):
 # save seen classes, unseen classes, attributes
 # saveClass(seen_classes, 'seen.txt')
 # saveClass(unseen_classes, 'unseen.txt')
+
+
+
 att_id_dict = saveAttr(att_list2, 'attribute.txt')
-
-
 # construct wnid&att pair
 edges = list()
 for wnid, att in seen_cls_att.items():
@@ -127,8 +128,12 @@ for wnid, att in unseen_cls_att.items():
             continue
         else:
             edges.append((wnid, att_id_dict[at]))
-
 json.dump(edges, open(os.path.join(DATA_DIR, EXP_NAME, 'class-att.json'), 'w'))
+
+
+
+
+
 
 # print(result)
 

@@ -47,8 +47,8 @@ class DATA_LOADER(object):
 
         if args.DATASET == 'ImageNet':
             self.read_imagenet(args)
-        else:
-            self.read_dataset(args)
+        # else:
+            # self.read_dataset(args)
         self.index_in_epoch = 0
         self.epochs_completed = 0
 
@@ -57,6 +57,42 @@ class DATA_LOADER(object):
         self.text_dim = self.sem_dim  # 500
         self.train_cls_num = self.seenclasses.shape[0]
         self.test_cls_num = self.unseenclasses.shape[0]
+        self.tr_cls_centroid = np.zeros([self.seenclasses.shape[0], self.feature_dim], np.float32)  # (249, 2048)
+        # torch.nonzero: return the index of non-zero value
+        # function: average the sample feature of seen classes
+        for i in range(self.seenclasses.shape[0]):
+            self.tr_cls_centroid[i] = np.mean(
+                self.train_feature[torch.nonzero(self.train_mapped_label == i), :].numpy(), axis=0)
+        cluster_path = os.path.join(args.DATADIR, args.DATASET, 'KG-GAN', args.ExpName, args.Cluster_Save_Dir)
+        if os.path.exists(cluster_path):
+            path = os.path.join(cluster_path, 'real_proto.pickle')
+            with open(path, 'rb') as file:
+                real_proto = pickle.load(file)
+            self.real_proto = real_proto
+        else:
+            os.mkdir(cluster_path)
+            n_cluster = args.NClusters  # 3
+            real_proto = torch.zeros(n_cluster * self.train_cls_num, self.feature_dim)  # (40*3, 2048)
+            for i in range(self.train_cls_num):
+                sample_idx = (self.train_mapped_label == i).nonzero().squeeze()  # i-th seen samples index
+                # torch.numel(): return the number of sample_idx's elements
+                if sample_idx.numel() == 0:
+                    real_proto[n_cluster * i: n_cluster * (i + 1)] = torch.zeros(n_cluster, self.feature_dim)
+                else:
+                    real_sample_cls = self.train_feature[sample_idx, :]  # i-th seen sample's all features
+                    print(i, " begin clustering ... :", GetNowTime())
+                    y_pred = KMeans(n_clusters=n_cluster, random_state=3).fit_predict(real_sample_cls)
+                    print(i, "  end  clustering ... :", GetNowTime())
+                    for j in range(n_cluster):
+                        real_proto[n_cluster * i + j] = torch.from_numpy(
+                            real_sample_cls[torch.nonzero(torch.from_numpy(y_pred) == j), :].mean(dim=0).cpu().numpy())
+            path = os.path.join(cluster_path, 'real_proto.pickle')
+            file = open(path, 'wb')
+            pickle.dump(real_proto, file)
+            file.close()
+
+            self.real_proto = real_proto  # (249*5, 2048)
+        print("real proto shape:", self.real_proto.shape)
 
 
 
@@ -188,79 +224,7 @@ class DATA_LOADER(object):
         self.train_cls_num = self.ntrain_class
         self.test_cls_num = self.ntest_class
 
-    def read_dataset(self, args):
 
-        matcontent = scio.loadmat(os.path.join(args.DATADIR, args.DATASET, args.FeaFile))
-
-        feature = matcontent['features'].T  # (30475, 2048), i.e., (sample_num, feature_dim)
-        # label index starts from 0, matlab starts from 1
-        label = matcontent['labels'].astype(int).squeeze() - 1  # (30475), sample_num
-        matcontent = scio.loadmat(os.path.join(args.DATADIR, args.DATASET, args.SemFile))
-        # numpy array index starts from 0, matlab starts from 1
-        trainval_loc = matcontent['trainval_loc'].squeeze() - 1  # (19832), train_sample num
-        # train_loc = matcontent['train_loc'].squeeze() - 1
-        # val_unseen_loc = matcontent['val_loc'].squeeze() - 1
-        test_seen_loc = matcontent['test_seen_loc'].squeeze() - 1
-        test_unseen_loc = matcontent['test_unseen_loc'].squeeze() - 1
-        # shared neighbors as additional attributes -> new semantic file
-        new_M_content = scio.loadmat(os.path.join(args.DATADIR, args.DATASET, 'class-attribute-neighbor.mat'))
-        self.semantic = torch.from_numpy(new_M_content['attribute_neighbor_M']).float()
-        print('attribute shape:', self.semantic.shape)  # (50, 103)
-        # self.attribute = torch.from_numpy(matcontent['att'].T).float()
-        # print('attrute shape:', self.attribute.shape)
-
-        if not args.Cross_Validation:
-            if args.PreProcess:
-                if args.Standardization:
-                    print('standardization...')
-                    scaler = preprocessing.StandardScaler()
-                else:
-                    scaler = preprocessing.MinMaxScaler()
-
-                _train_feature = scaler.fit_transform(feature[trainval_loc])
-                _test_seen_feature = scaler.transform(feature[test_seen_loc])
-                _test_unseen_feature = scaler.transform(feature[test_unseen_loc])
-                self.train_feature = torch.from_numpy(_train_feature).float()  # get data from numpy, and share memory
-                mx = self.train_feature.max()
-                self.train_feature.mul_(1 / mx)  # in-place operation: train_feature = torch.mul(train_feature,(1/mx))
-                self.train_label = torch.from_numpy(label[trainval_loc]).long()  # seen class index when training
-                self.test_unseen_feature = torch.from_numpy(_test_unseen_feature).float()
-                self.test_unseen_feature.mul_(1 / mx)
-                self.test_unseen_label = torch.from_numpy(
-                    label[test_unseen_loc]).long()  # unseen class index when testing
-                self.test_seen_feature = torch.from_numpy(_test_seen_feature).float()
-                self.test_seen_feature.mul_(1 / mx)
-                self.test_seen_label = torch.from_numpy(label[test_seen_loc]).long()  # seen class index when testing
-            else:
-                self.train_feature = torch.from_numpy(feature[trainval_loc]).float()
-                self.train_label = torch.from_numpy(label[trainval_loc]).long()
-                self.test_unseen_feature = torch.from_numpy(feature[test_unseen_loc]).float()
-                self.test_unseen_label = torch.from_numpy(label[test_unseen_loc]).long()
-                self.test_seen_feature = torch.from_numpy(feature[test_seen_loc]).float()
-                self.test_seen_label = torch.from_numpy(label[test_seen_loc]).long()
-        else:
-            pass
-            # self.train_feature = torch.from_numpy(feature[train_loc]).float()
-            # self.train_label = torch.from_numpy(label[train_loc]).long()
-            # self.test_unseen_feature = torch.from_numpy(feature[val_unseen_loc]).float()
-            # self.test_unseen_label = torch.from_numpy(label[val_unseen_loc]).long()
-
-        self.seenclasses = torch.from_numpy(np.unique(self.train_label.numpy()))  # 40
-        print("seen classes:", self.seenclasses)
-        self.unseenclasses = torch.from_numpy(np.unique(self.test_unseen_label.numpy()))
-        print("unseen classes:", self.unseenclasses)
-        self.ntrain = self.train_feature.size()[0]  # number of training samples
-        self.ntrain_class = self.seenclasses.size(0)  # number of seen classes
-        self.ntest_class = self.unseenclasses.size(0)  # number of unseen classes
-        self.train_class = self.seenclasses.clone()  # copy
-        self.allclasses = torch.arange(0, self.ntrain_class + self.ntest_class).long()
-
-        self.train_mapped_label = map_label(self.train_label, self.seenclasses)  # filter the unseen/test label, set to 0
-
-        self.train_sem = self.semantic[self.seenclasses].numpy()
-        self.test_sem = self.semantic[self.unseenclasses].numpy()
-        self.train_cls_num = self.ntrain_class
-        self.test_cls_num = self.ntest_class
 
     def next_batch_one_class(self, batch_size):
         if self.index_in_epoch == self.ntrain_class:

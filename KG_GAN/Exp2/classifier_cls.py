@@ -16,7 +16,7 @@ import numpy as np
 
 
 sys.path.append('../../')
-from KG_GAN.Exp import util
+from KG_GAN.Exp2 import util
 
 
 # classifier in testing stage, is trained with generated unseen features
@@ -128,8 +128,7 @@ class CLASSIFIER:
                 self.optimizer.step()
             # using real testing data (of unseen classes) to test classifier2
             # overall_acc, pred, output, acc_of_all = self.val_zsl(self.test_unseen_feature, self.test_unseen_label,
-
-            # testing only hit@1                                                      self.unseenclasses)
+            #                                                      self.unseenclasses)
             overall_acc, acc_of_all = self.val_zsl(self.test_unseen_feature, self.test_unseen_label,
                                                                  self.unseenclasses)
             # testing the hit@1,2,5,..
@@ -139,10 +138,10 @@ class CLASSIFIER:
             #  get the highest evaluation result
             if overall_acc > first_acc:
                 first_acc = overall_acc
-                # first_accs = overall_acc_Hit
+                # first_accs = overall_acc_Hits
                 # first_all_pred = pred
                 # first_all_output = output
-                # first_acc_of_all = acc_of_all
+                first_acc_of_all = acc_of_all
 
         print('First Acc: {:.2f}%'.format(first_acc * 100))
         # print('First Acc: ', ['{:.2f}'.format(i * 100) for i in first_accs])
@@ -367,7 +366,7 @@ class CLASSIFIER:
 
     # def compute_per_class_acc
     def compute_acc_avg_per_class_Hit(self, test_label, predicted_label, nclass):
-        top = [1, 2, 5]
+        top = [1, 2, 5, 10, 20]
         acc_per_class = torch.FloatTensor(nclass, len(top)).fill_(0)
         for i in range(nclass):
             idxs = (test_label == i).nonzero().squeeze()

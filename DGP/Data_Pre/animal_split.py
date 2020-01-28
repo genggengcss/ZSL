@@ -14,10 +14,8 @@ output: imagenet-xml-animals.json
 function: extract animal subset, and keep each animal class have word embedding 
 '''
 
-# DATA_DIR = '/home/gyx/ZSL/data/ImageNet/Baseline/DGP'
 DATA_DIR = '/Users/geng/Desktop/ZSL_DATA/ImageNet/Baseline/DGP'
 Material_DATA_DIR = '/Users/geng/Desktop/ZSL_DATA/ImageNet'
-# Material_DATA_DIR = '/home/gyx/ZSL/data/ImageNet'
 
 # read txt file
 def readTxtFile(file):
@@ -50,12 +48,12 @@ def keepValid(valid_set, wnids):
 
 # ### 1. extract animal subset and keep each node have w2v
 # animal nodes set
-animal_wnids_file = os.path.join(Material_DATA_DIR, 'materials', 'wnids-animal.txt')
+animal_wnids_file = os.path.join(Material_DATA_DIR, 'materials', 'wnids-fa11misc.txt')
 w2v_valid_class_file = os.path.join(Material_DATA_DIR, 'materials', 'split-filter/all.txt')
 # load all imagenet wnids/nodes
 imagenet_xml_file = os.path.join(DATA_DIR, 'materials', 'imagenet-xml-wnids.json')
 # store all animal subset wnids
-imagenet_xml_animal_file = os.path.join(DATA_DIR, 'materials', 'imagenet-xml-wnids-animal.json')
+imagenet_xml_animal_file = os.path.join(DATA_DIR, 'materials', 'imagenet-xml-wnids-food.json')
 
 
 
