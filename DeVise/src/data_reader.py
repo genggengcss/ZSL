@@ -5,11 +5,14 @@ import os
 import re
 from collections import defaultdict
 
+# load data (semantic embedding) from mat file
+# g2v.mat: trained kg embedding;
+# w2v.mat: word embedding
 def get_vec_mat():
     vec_pth = "./ZSL_DATA/ImageNet/g2v.mat"
     vec_mat = sio.loadmat(vec_pth)
     vec_mat = vec_mat['n2v']
-    vec_mat=vec_mat.astype(np.float64)
+    vec_mat = vec_mat.astype(np.float64)
     return vec_mat
 
 
@@ -17,36 +20,36 @@ class data_reader(Dataset):
     def __init__(self, folder_dir, train=True):
         ### Use C.E data ###
         #
-        vec_mat=get_vec_mat()
-        self.pth=os.path.join(folder_dir)
+        vec_mat = get_vec_mat()
+        self.pth = os.path.join(folder_dir)
         dirs = os.listdir(self.pth)
-        self.x=[]
+        self.x = []
         self.y_tag = [] #tag
-        self.y_vec=[] #vec
+        self.y_vec = [] #vec
         for f in dirs:
-            tmp_dir=os.path.join(self.pth,f)
+            tmp_dir = os.path.join(self.pth,f)
             mat = sio.loadmat(tmp_dir)
-            features=mat['features'].astype(np.float64)
-            #get id
-            id=int(re.sub("\D","",f))
-        #id tag build
-            for i in range(features.shape[0]): # 50 or //features.shape[0]
+            features = mat['features'].astype(np.float64)
+            #  get id
+            id = int(re.sub("\D","",f))
+            # id tag build
+            for i in range(features.shape[0]):  # 50 or //features.shape[0]
                 self.y_tag.append(id)
             # vec build
-            idx=id-1 # must -1
+            idx = id-1  # must -1
             for i in range(features.shape[0]):
                 self.y_vec.append(vec_mat[idx])
-            #features build
+            # features build
             if len(self.x) == 0:
                 self.x = features
             else:
                 self.x = np.concatenate((self.x, features), axis=0)
 
 
-        self.x=self.x.astype(np.float64)
+        self.x = self.x.astype(np.float64)
         self.y_vec = np.array(self.y_vec).astype(np.float64)
-        print("features data size: ",self.x.shape) # (24700, 2048)  2450
-        print("tag data len: ", len(self.y_tag)) # (24700)  2450
+        print("features data size: ", self.x.shape)  # (24700, 2048)  2450
+        print("tag data len: ", len(self.y_tag))  # (24700)  2450
 
         set1 = set(self.y_tag)
         print("length of tag:",len(set1))

@@ -1,21 +1,29 @@
 # ZSL
 
 ### Baseline
-**DeViSE**: "Devise: A deep visual-semantic embedding model"  
-**CONSE**: "Zero-shot learn- ing by convex combination of semantic embeddings"  
-**SAE**: "Semantic autoencoder for zero-shot learning"  
-**SYNC**: "Synthesized classifiers for zero-shot learning"  
-**GCNZ**: "Zero-shot recognition via semantic embeddings and knowledge graphs"  
-**DGP**: "Rethinking knowledge graph propagation for zero-shot learning"  
-**GAZSL**: "A generative adversarial approach for zero-shot learning from noisy texts"  
-**LisGAN**: "Leveraging the invariant side of generative zero-shot learning"  
+**DeViSE**: "Devise: A deep visual-semantic embedding model" (pytorch)  
+**CONSE**: "Zero-shot learn- ing by convex combination of semantic embeddings" (Matlab)  
+**SAE**: "Semantic autoencoder for zero-shot learning" (pytorch)  
+**SYNC**: "Synthesized classifiers for zero-shot learning" (Matlab)   
+*********  
+**GCNZ**: "Zero-shot recognition via semantic embeddings and knowledge graphs" (python2 + tensorflow)  
+**DGP**: "Rethinking knowledge graph propagation for zero-shot learning" (python3 + pytorch)  
+**GAZSL**: "A generative adversarial approach for zero-shot learning from noisy texts" (pytorch)  
+**LisGAN**: "Leveraging the invariant side of generative zero-shot learning" (pytorch)  
 
-### Experiment Class Split 
+### Setting
+DeViSE, CONSE, SAE and SYNC run with two semantic embeddings (**w2v**: word embedding; **g2v**: trained kg embedding)  
+the dimension of **w2v** is 500, and **g2v** is 100.  
+
+
+GCNZ and DGP 's input is word embedding;  
+GAZSL, LisGAN and KG-GAN 's input includes both **w2v** and **g2v**.  
+
+
+#### Experiment Class Split (for GCNZ, DGP, LisGAN, GAZSL, ...)
 **Exp1**: original animal classes subset (seen:398, unseen:485)
-
-#### Small Subset
-**Exp2**: standard split (seen:19, unseen:49)  
-**Exp3**: proposed split (seen:14, unseen:54)
+**Exp9**: "animal" subset ImNet-A (seen:25, unseen:55)  
+**Exp10**: "other" subset ImNet-O (seen:10, unseen:25)
 
 
 ### Run Command
@@ -23,40 +31,35 @@
 #### GCNZ
 
 **construct graph**:  
-python io_graph.py --mtr_exp_name Exp2 --exp_name Exp2_1949  
+python io_graph.py --mtr_exp_name Exp9 --exp_name Exp9_2555  
 
 **prepare graph input**:  
-python io_train_sample.py --mtr_exp_name Exp2 --exp_name Exp2_1949  
-python io_train_sample.py --mtr_exp_name Exp3 --exp_name Exp3_1454 --proposed_split
+python io_train_sample.py --mtr_exp_name Exp9 --exp_name Exp9_2555  
 
 **train**:  
-python train_predict_gcn.py --mtr_exp_name Exp2 --exp_name Exp2_1949  
+python train_predict_gcn.py --mtr_exp_name Exp9 --exp_name Exp9_2555  
 
-**test (50 sample):**  
-python test_gcn.py --mtr_exp_name Exp2 --exp_name Exp2_1949 --feat 900 --nsample 50  
-python test_gcn.py --mtr_exp_name Exp3 --exp_name Exp3_1454 --feat 850 --nsample 50 --proposed_split  
+**test:**  
+python test_gcn.py --mtr_exp_name Exp9 --exp_name Exp9_2555 --feat 900  
 **test (gzsl):**  
-python test_gcn.py --mtr_exp_name Exp2 --exp_name Exp2_1949 --feat 900 --nsample 50 --gzsl
+python test_gcn.py --mtr_exp_name Exp9 --exp_name Exp9_2555 --feat 900 --gzsl
 
 #### DGP
 **prepare graph**:  
-python make_induced_graph.py --mtr_exp_name Exp2 --exp_name Exp2_1949
+python make_induced_graph.py --mtr_exp_name Exp9 --exp_name Exp9_2555
 
 **train**:  
-python train_predict_gpm.py --mtr_exp_name Exp2 --exp_name Exp2_1949  
-python train_predict_gpm.py --mtr_exp_name Exp3 --exp_name Exp3_1454 --proposed_split
+python train_predict_gpm.py --mtr_exp_name Exp9 --exp_name Exp9_2555  
 
 **test**:  
-python test_gpm.py --mtr_exp_name Exp2 --exp_name Exp2_1949 --pred 400 --nsample 50  
-python test_gpm.py --mtr_exp_name Exp3 --exp_name Exp3_1454 --pred 300 --nsample 50 --proposed_split
+python test_gpm.py --mtr_exp_name Exp9 --exp_name Exp9_2555 --pred 400  
 
 **test (gzsl)**:  
-python test_gpm.py --mtr_exp_name Exp2 --exp_name Exp2_1949 --pred 400 --nsample 50 --gzsl
+python test_gpm.py --mtr_exp_name Exp9 --exp_name Exp9_2555 --pred 400 --gzsl
 
 
 #### KG_GAN  
-**w2v**: python lisgan.py --ExpName Exp2 --SemEmbed w2v  
-**w2v**: python lisgan.py --ExpName Exp3 --SemEmbed w2v --ProposedSplit  
-**n2v**: python lisgan.py --ExpName Exp2 --SemFile n2v.mat --SemSize 100 --NoiseSize 50  
+**w2v**: python gan.py --ExpName Exp9 --SemEmbed w2v  
+**g2v**: python gan.py --ExpName Exp9 --SemFile g2v.mat --SemSize 100 --NoiseSize 100  
 
-**gzsl**: python lisgan.py --ExpName Exp2 --SemFile n2v.mat --SemSize 100 --NoiseSize 50 --GZSL
+**gzsl**: python gan.py --ExpName Exp9 --SemFile g2v.mat --SemSize 100 --NoiseSize 100 --GZSL
