@@ -1,6 +1,10 @@
 # ZSL
 
 ### Baseline
+**DeViSE**: "Devise: A deep visual-semantic embedding model"  
+**CONSE**: "Zero-shot learn- ing by convex combination of semantic embeddings"  
+**SAE**: "Semantic autoencoder for zero-shot learning"  
+**SYNC**: "Synthesized classifiers for zero-shot learning"  
 **GCNZ**: "Zero-shot recognition via semantic embeddings and knowledge graphs"  
 **DGP**: "Rethinking knowledge graph propagation for zero-shot learning"  
 **GAZSL**: "A generative adversarial approach for zero-shot learning from noisy texts"  
