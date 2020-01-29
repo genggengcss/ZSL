@@ -3,7 +3,7 @@
 ### Baseline
 (author: Chen Zhuo)  
 **DeViSE**: "Devise: A deep visual-semantic embedding model" (pytorch)  
-**CONSE**: "Zero-shot learn- ing by convex combination of semantic embeddings" (Matlab)  
+**CONSE**: "Zero-shot learning by convex combination of semantic embeddings" (Matlab)  
 **SAE**: "Semantic autoencoder for zero-shot learning" (pytorch)  
 **SYNC**: "Synthesized classifiers for zero-shot learning" (Matlab)   
 ********* 
@@ -16,7 +16,7 @@
 ### Setting
 DeViSE, CONSE, SAE and SYNC run with two semantic embeddings (**w2v**: word embedding; **g2v**: trained kg embedding)  
 the dimension of **w2v** is 500, and **g2v** is 100.  
-
+w2v download: https://github.com/pujols/zero-shot-learning
 
 GCNZ and DGP 's input is word embedding;  
 GAZSL, LisGAN and KG-GAN also run with **w2v** and **g2v**.  
