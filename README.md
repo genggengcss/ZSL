@@ -1,11 +1,13 @@
 # ZSL
 
 ### Baseline
+(author: Chen Zhuo)  
 **DeViSE**: "Devise: A deep visual-semantic embedding model" (pytorch)  
 **CONSE**: "Zero-shot learn- ing by convex combination of semantic embeddings" (Matlab)  
 **SAE**: "Semantic autoencoder for zero-shot learning" (pytorch)  
 **SYNC**: "Synthesized classifiers for zero-shot learning" (Matlab)   
-*********  
+********* 
+(author: Geng Yuxia)   
 **GCNZ**: "Zero-shot recognition via semantic embeddings and knowledge graphs" (python2 + tensorflow)  
 **DGP**: "Rethinking knowledge graph propagation for zero-shot learning" (python3 + pytorch)  
 **GAZSL**: "A generative adversarial approach for zero-shot learning from noisy texts" (pytorch)  
@@ -17,11 +19,11 @@ the dimension of **w2v** is 500, and **g2v** is 100.
 
 
 GCNZ and DGP 's input is word embedding;  
-GAZSL, LisGAN and KG-GAN 's input includes both **w2v** and **g2v**.  
+GAZSL, LisGAN and KG-GAN also run with **w2v** and **g2v**.  
 
 
-#### Experiment Class Split (for GCNZ, DGP, LisGAN, GAZSL, ...)
-**Exp1**: original animal classes subset (seen:398, unseen:485)
+#### Experiment Class Split (for GCNZ, DGP, LisGAN, GAZSL, KG-GAN)
+**Exp1**: original animal classes subset (seen:398, unseen:485)  
 **Exp9**: "animal" subset ImNet-A (seen:25, unseen:55)  
 **Exp10**: "other" subset ImNet-O (seen:10, unseen:25)
 
