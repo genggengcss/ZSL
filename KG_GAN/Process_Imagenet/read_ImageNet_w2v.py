@@ -4,8 +4,7 @@ import h5py
 
 file_name = '/Users/geng/Downloads/ImageNet_w2v/ImageNet_w2v.mat'
 matcontent = h5py.File(file_name, 'r')
-print(matcontent.keys())
-
+print(matcontent.keys())  # <KeysViewHDF5 ['#refs#', 'no_w2v_loc', 'w2v', 'wnids', 'words']>
 
 
 ## read w2v
